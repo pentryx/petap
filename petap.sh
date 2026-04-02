@@ -225,16 +225,8 @@ build_exclude_list() {
     fi
 }
 
-ask_cache_exclusion() {
-    echo ""
-    read -rp "Kullanıcı cache dizinleri (~/.cache) dışarıda bırakılsın mı? (ISO boyutunu küçültür) [E/h]: " cans
-    if [[ "$cans" != "h" && "$cans" != "H" ]]; then
-        SKIP_CACHE="yes"
-        info "Cache dizinleri dışarıda bırakılacak."
-    else
-        SKIP_CACHE="no"
-    fi
-}
+# Cache dizinleri her zaman dışarıda bırakılır (ISO boyutunu küçültür)
+SKIP_CACHE="yes"
 
 # =============================================================================
 # SQUASHFS OLUŞTURMA
@@ -401,7 +393,6 @@ main() {
     select_output_dir
     download_iso
     extract_iso
-    ask_cache_exclusion
     create_squashfs
     update_size_file
     update_md5
