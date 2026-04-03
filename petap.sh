@@ -271,21 +271,10 @@ update_size_file() {
     step "Calamares için boyut dosyası güncelleniyor..."
 
     local size_file="$ISO_DIR/live/filesystem.size"
-    local total=0
-
-    # Dışarıda bırakılan dizinlerin toplam boyutunu hesapla
-    local exclude_size=0
-    for excl in "${EXCLUDES[@]}"; do
-        if [[ -d "$excl" ]]; then
-            s=$(du -sb "$excl" 2>/dev/null | cut -f1 || echo 0)
-            exclude_size=$(( exclude_size + s ))
-        elif [[ -f "$excl" ]]; then
-            s=$(stat -c%s "$excl" 2>/dev/null || echo 0)
-            exclude_size=$(( exclude_size + s ))
-        fi
-    done
+    local total
 
     total=$(df --block-size=1 / | awk 'NR==2 {print $3}')
+    total="${total:-0}"
     echo "$total" > "$size_file"
     success "filesystem.size güncellendi: $total byte"
 }
