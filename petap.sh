@@ -125,11 +125,12 @@ detect_desktop() {
 select_output_dir() {
     step "Çıktı dizini belirleniyor..."
 
-    DEFAULT_DIR="$HOME/pardus-remaster"
-    read -rp "Çalışma dizini (Enter = $DEFAULT_DIR): " WORK_DIR
-    WORK_DIR="${WORK_DIR:-$DEFAULT_DIR}"
+    # Scriptin bulunduğu dizini otomatik kullan
+    WORK_DIR="$(cd "$(dirname "$(realpath "$0")")" && pwd)/pardus-remaster"
 
-    # Boş alan kontrolü (en az 12 GB)
+    info "Çalışma dizini: $WORK_DIR"
+
+    # Boş alan kontrolü (en az 10 GB)
     AVAIL_KB=$(df -k "$(dirname "$WORK_DIR")" | awk 'NR==2 {print $4}')
     AVAIL_GB=$(( AVAIL_KB / 1024 / 1024 ))
 
@@ -144,7 +145,7 @@ select_output_dir() {
     OUTPUT_ISO="$WORK_DIR/Pardus-${PARDUS_VERSION}-${DESKTOP}-custom.iso"
 
     mkdir -p "$ISO_DIR" "$SQUASHFS_TMP"
-    success "Çalışma dizini: $WORK_DIR"
+    success "Çalışma dizini oluşturuldu: $WORK_DIR"
 }
 
 # =============================================================================
